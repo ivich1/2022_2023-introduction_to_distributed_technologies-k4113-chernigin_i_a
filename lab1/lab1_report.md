@@ -20,7 +20,7 @@ Date of finished: 30.11.2022
 ```html
 kubectl apply -f C:\kube\vaultPod.yaml
 ```
-[image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic1_dashboard.png)
+![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic1_dashboard.png)
 ## Создал сервис
 1. создал сервис
 ```html
@@ -32,15 +32,14 @@ kubectl port-forward service/hashicorp-vault 8200:8200
 ```
 ## Вход
 1. в логах находим токен
-[image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic2_logs.png)
+![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic2_logs.png)
 
 
 2. заходим http://127.0.0.1:8200, вводим токен
-[image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic3_vault.png)
+![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic3_vault.png)
 
 3. результат входа
-[image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic4_invault.png)
-
+![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic4_invault.png)
 
 # Вопросы, ответы
 -
