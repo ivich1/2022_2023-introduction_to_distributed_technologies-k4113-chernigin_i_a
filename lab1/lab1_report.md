@@ -45,7 +45,10 @@ kubectl port-forward service/hashicorp-vault 8200:8200
 
 3. результат входа
 ![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic4_invault.png)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 029df4abca3f9ad39aab5118370d7007c84f5374
 
 # Вопросы, ответы
 -
