@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hashicorp-vault
+  namespace: default
+  labels:
+    app: hashicorp-vault
+spec:
+  containers:
+  - name: hashicorp-vault-container
+    image: hashicorp/vault
+    ports:
+    - containerPort: 8200
