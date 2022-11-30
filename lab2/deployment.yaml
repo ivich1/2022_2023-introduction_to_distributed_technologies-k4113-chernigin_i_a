@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ifilyaninitmo-pod
+  labels:
+    app: ifilyaninitm-front
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ifilyaninitmo-pod
+  template:
+    metadata:
+      labels:
+        app: ifilyaninitmo-pod
+    spec:
+      containers:
+      - name: ifilyaninitm-front
+        image: ifilyaninitmo/itdt-contained-frontend:master
+        env:
+            - name: REACT_APP_USERNAME
+              value: ivan-username-example
+            - name: REACT_APP_COMPANY_NAME
+              value: ivan-company-name-example
+        ports:
+        - containerPort: 3000
