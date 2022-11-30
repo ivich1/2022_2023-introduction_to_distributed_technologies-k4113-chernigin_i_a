@@ -8,23 +8,45 @@ Lab: Lab1
 Date of create: 30.11.2022
 Date of finished: 30.11.2022
 
-Ход работы:
-Описание шагов и команды
+# Ход работы
 
-*) Предварительно установил Kubernetes Dashboard
+Предварительно установил Kubernetes Dashboard
 
-1) Установил minikube (windows, через .exe установщик)
-2) Запкустил под с vault
-    - cоздал vaultPod.yml
-    - нашел образ на docker hub
-    - запустил
-        kubectl apply -f C:\kube\vaultPod.yaml 
-        image.png
-3) Создал сервис
-    - создал сервис
-        kubectl -- expose pod hashicorp-vault --type=NodePort --port=8200
-    - пробросил порт
-        kubectl port-forward service/hashicorp-vault 8200:8200
+## Установил minikube (windows, через .exe установщик)
+## Запкустил под с vault
+1. cоздал vaultPod.yml
+2. нашел образ на docker hub
+3. запустил
+```html
+kubectl apply -f C:\kube\vaultPod.yaml
+```
+[image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic1_dashboard.png)
+## Создал сервис
+1. создал сервис
+```html
+kubectl -- expose pod hashicorp-vault --type=NodePort --port=8200
+```        
+2. пробросил порт
+```html
+kubectl port-forward service/hashicorp-vault 8200:8200
+```
+## Вход
+1. в логах находим токен
+[image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic2_logs.png)
+
+
+2. заходим http://127.0.0.1:8200, вводим токен
+[image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic3_vault.png)
+
+3. результат входа
+[image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic4_invault.png)
+
+
+# Вопросы, ответы
+-
+
+
+
 
 
 
