@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+data:
+  REACT_APP_USERNAME: "hello-from-configmap-username"
+  REACT_APP_COMPANY_NAME: "configmap-company" 
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: frontend2
+  labels:
+    app: f-frontend2
+    tier: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      tier: frontend2
+  template:
+    metadata:
+      labels:
+        tier: frontend2
+    spec:
+      containers:
+      - name: ifilyaninitmo-frontend
+        image: ifilyaninitmo/itdt-contained-frontend:master
+        env:
+        - name: REACT_APP_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-config
+              key: REACT_APP_USERNAME          
+        - name: REACT_APP_COMPANY_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-config
+              key: REACT_APP_COMPANY_NAME

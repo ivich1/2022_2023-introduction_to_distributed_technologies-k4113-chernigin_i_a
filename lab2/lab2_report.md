@@ -19,7 +19,7 @@ Date of finished: 30.11.2022
 результат
 ![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab2/pic2.png)
 
-## Создал сервис
+## Создание сервиса
 1. создал сервис 
 ```html
 kubectl expose deployment ifilyaninitmo-pod --type=LoadBalancer --port=3000
