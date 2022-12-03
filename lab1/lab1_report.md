@@ -22,33 +22,34 @@ minicube start
 1. cоздал vaultPod.yml
 2. нашел образ на docker hub
 3. запустил
+
 ```html
 kubectl apply -f C:\kube\vaultPod.yaml
 ```
-![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic1_dashboard.png)
+
+![image alt](./pic1_dashboard.png)
+
 ## Создал сервис
+
 1. создал сервис
-```html
+```bash
 kubectl -- expose pod hashicorp-vault --type=NodePort --port=8200
 ```        
 2. пробросил порт
-```html
+```zsh
 kubectl port-forward service/hashicorp-vault 8200:8200
 ```
 ## Вход
 1. в логах находим токен
-![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic2_logs.png)
+![image alt](./pic2_logs.png)
 
 
 2. заходим http://127.0.0.1:8200, вводим токен
-![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic3_vault.png)
+![image alt](./pic3_vault.png)
 
 3. результат входа
-![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic4_invault.png)
-<<<<<<< HEAD
+![image alt](./pic4_invault.png)
 
-=======
->>>>>>> 029df4abca3f9ad39aab5118370d7007c84f5374
 
 # Вопросы, ответы
 -
