@@ -13,7 +13,7 @@ Date of finished: 30.11.2022
 Предварительно установил Kubernetes Dashboard
 
 ## Создание configMap и replicaSet
-1. в yaml прописал configMap
+1. configMap
 ```html
 apiVersion: v1
 kind: ConfigMap
@@ -24,7 +24,7 @@ data:
   REACT_APP_COMPANY_NAME: "configmap-company" 
 ```  
 
-2. в yaml прописал replicaSet
+2. replicaSet
 ```html
 apiVersion: apps/v1
 kind: ReplicaSet
@@ -59,7 +59,7 @@ spec:
               key: REACT_APP_COMPANY_NAME
 ```  
 
-3. объединил в rs1.yaml и запустил
+3. объединяем в rs1.yaml и запусткаем
 ```html
 kubectl apply -f C:\kube\lab3\rs1.yaml
 ```
@@ -67,71 +67,85 @@ kubectl apply -f C:\kube\lab3\rs1.yaml
 4. результат (созданный replicaSet - frontend2)      
 ![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab3/pic1.png)
 
+5. запускаем сервис
+```html
+apiVersion: v1
+kind: Service
+metadata:
+  name: f2-service
+spec:
+  selector:
+    app: frontend2
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+```
+
 ## Защищиенное соединение
-1. 
+1. включение ingress
 ```html
 minikube addons enable ingress
+```
+2. секрет
+- я создавал секреь через mkcert (предваритьельно установил)
+```html
+kubectl -n kube-system create secret tls mkcert --key key.pem --cert cert.pem
+```
+- указал секрет в конфигурации ingress
 
-2. cоздание ingress
+```html
+minikube addons configure ingress
+-- Enter custom cert (format is "namespace/secret"): secret/mkcert
+```
+- перезапустил ingress
+
+3. cоздание ingress
 ```html
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: f-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   ingressClassName: nginx
   rules:
-  - host: frontend.info
+  - host: f-frontend.info
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: ifilyaninitmo-pod
+            name: frontend2
             port:
-              number: 3000
+              number: 3200
+tls:
+  - hosts:
+      - f-frontend.info
+    secretName: mkcert
 ```
 
-3. дополнительные действия
+4. дополнительные действия
 тк как я на windos 
 ```html
-minikube tunel
+minikube tunnel
 ```
 ```html
 kubectl get ingress
 ```
-> {
-NAME        CLASS   HOSTS           ADDRESS        PORTS   AGE
-f-ingress   nginx   frontend.info   192.168.49.2   80      34m
-}
+>NAME        CLASS   HOSTS           ADDRESS        PORTS   AGE
+>f-ingress   nginx   frontend.info   192.168.49.2   80      34m
+
 в файле hosts прописываем: 
 ```html
 192.168.49.2 frontend.info
 ```
-3. 
+5. 
 
-
-
-
-
-
-
-2. пробросил порт
-```html
-kubectl port-forward service/ifilyaninitmo-pod 3000:3000
-```
 
 ## Результат
 1. http://127.0.0.1:3000
 ![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab2/pic3.png)
-
-2. Логи 1 из контейнеров
-![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab2/pic3.png)\
-
-3. В deployment.yaml манифкест для развертывания идентичного deployment
 
 # Вопросы, ответы
 1. Изменяются ли переменные? Если да то почему?

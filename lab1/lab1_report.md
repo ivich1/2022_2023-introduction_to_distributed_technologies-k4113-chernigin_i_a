@@ -8,47 +8,110 @@ Lab: Lab1
 Date of create: 30.11.2022
 Date of finished: 30.11.2022
 
+
+# Лабораторная работа №1 "Установка Docker и Minikube, мой первый манифест."
 # Ход работы
 
-Предварительно установил Kubernetes Dashboard
+В данной работе будет испльзоваться Kubernetes Dashboard 
 
-##  minikube
-1. Установил minikube (windows, через .exe установщик)
-2. Запустил
+#  Minikube, установка всего необходимого
+
+Устанавливаем minikube, в моем случае через .exe установщик
+ 
+Для запуска minicube прописывем следующую команду в терминале
+
 ```html
 minicube start
 ```
-## Запкустил под с vault
-1. cоздал vaultPod.yml
-2. нашел образ на docker hub
-3. запустил
-```html
+
+# Запуск pod с vault
+
+В качестве первого пода был выбран vault от hashicorp
+
+В нашем случае будет использоваться готовый образ контейнера: hashicorp/vault
+
+Создание сервиса описывается в vaultPod.yaml
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hashicorp-vault
+  namespace: default
+  labels:
+    app: hashicorp-vault
+spec:
+  containers:
+  - name: hashicorp-vault-container
+    image: hashicorp/vault
+    ports:
+    - containerPort: 8200
+```
+
+Для запуска прописываем 
+```
+kubectl apply -f ???
+```
+где ??? - путь до созданного yaml файла
+
+В моем случае комана выглядит следующим образом
+```
 kubectl apply -f C:\kube\vaultPod.yaml
 ```
-![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic1_dashboard.png)
-## Создал сервис
-1. создал сервис
-```html
+
+Проверяем результ создания пода
+![image alt](./pic/pic1_dashboard.png)
+
+Также существующие поды можно посмотреть прописав команду
+```
+kubectl get pods
+```
+> эта команда выведет только поды в пространствве default
+
+# Создание сервиса
+Для доступа к поду потребуется сервис
+
+Дял его создания требуется прописать команду указав под, для которого создается сервис, тип сервиса и порт
+
+Следующая команда создает сервис для созданного пода
+
+```
 kubectl -- expose pod hashicorp-vault --type=NodePort --port=8200
-```        
-2. пробросил порт
-```html
+```    
+
+После создания сервиса мы все еще не можем обратиться к нему, тк он находится внутри kubernets,
+
+Для получения доступа достаточно пробросить порты
+
+Дял нашего севиса команда будет выглядеть так:
+
+```
 kubectl port-forward service/hashicorp-vault 8200:8200
 ```
-## Вход
-1. в логах находим токен
-![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic2_logs.png)
 
+# Вход
+Теперь мы можем обратиться к нашему сервису извне
 
-2. заходим http://127.0.0.1:8200, вводим токен
-![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic3_vault.png)
+Дял этого заходим на localhost, прописав в пути указанный ранее порт
 
-3. результат входа
-![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab1/pic4_invault.png)
-<<<<<<< HEAD
+![image alt](./pic/pic3_vault.png)
 
-=======
->>>>>>> 029df4abca3f9ad39aab5118370d7007c84f5374
+Для входа в хранилище потребуется ключ, его можно найти в логах контейнера
+
+Логи можно поспотреть следующей командой 
+
+```
+kubectl logs hashicorp-vault
+```
+
+> здесь hashicorp-vault - имя искомого контейнера
+
+>если не находит, возможно стоит поискать в других пространствах имен, и указать явно
+
+![image alt](./pic/pic2_logs.png)
+
+Результат входа
+![image alt](./pic/pic4_invault.png)
 
 # Вопросы, ответы
 -

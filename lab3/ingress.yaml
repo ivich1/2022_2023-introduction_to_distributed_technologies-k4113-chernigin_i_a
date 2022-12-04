@@ -1,19 +1,20 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: f-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  name: lab3-frontend-ingress
 spec:
-  ingressClassName: nginx
   rules:
-  - host: frontend.info
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: ifilyaninitmo-pod
-            port:
-              number: 3000
+    - host: lab3.frontend.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lab3-frontend-service
+                port:
+                  number: 8200
+  tls:
+    - hosts:
+        - lab3.frontend.org
+      secretName: tls-secret
