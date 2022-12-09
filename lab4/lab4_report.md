@@ -49,7 +49,7 @@ kubectl label nodes minikube zone=west
 kubectl label nodes minikube-m02 zone=east
 ```
 
-В результате дложно появиться сообщение об еспешном добавлении
+В результате дложно появиться сообщение об успешном добавлении
 
 ![image alt](./pic/pic3.png)
 
@@ -113,7 +113,22 @@ minikube service lab4-front
 ![image alt](./pic/pic5.png)
 
 В браузере
+
 ![image alt](./pic/pic6.png)
+
+пинг
+
+![image alt](./pic/pic7.png)
+
+![image alt](./pic/pic7-1.png)
+
+# Доп информация о подах
+
+![image alt](./pic/pic8.png)
+
+![image alt](./pic/pic9.png)
+
+
 
 
 

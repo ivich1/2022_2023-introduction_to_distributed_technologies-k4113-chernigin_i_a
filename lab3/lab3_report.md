@@ -10,10 +10,10 @@ Date of finished: 30.11.2022
 
 # Ход работы
 
-Предварительно установил Kubernetes Dashboard
+# Создание ConfigMap 
 
-## Создание configMap и replicaSet
-1. configMap
+ConfigMap описан в следующем yaml фаqле 
+
 ```html
 apiVersion: v1
 kind: ConfigMap
@@ -24,129 +24,159 @@ data:
   REACT_APP_COMPANY_NAME: "configmap-company" 
 ```  
 
-2. replicaSet
+# Создание Deployment
+
+Deployment описан в следующем yaml фаqле 
+
+Здесь используется ранее созданный ConfigMap (frontend-config)
+
 ```html
 apiVersion: apps/v1
-kind: ReplicaSet
+kind: Deployment
 metadata:
-  name: frontend2
+  name: lab3-front
   labels:
-    app: f-frontend2
-    tier: frontend
+    app: lab3-front
 spec:
   replicas: 2
   selector:
     matchLabels:
-      tier: frontend2
+      app: lab3-front
   template:
     metadata:
       labels:
-        tier: frontend2
+        app: lab3-front
     spec:
       containers:
-      - name: ifilyaninitmo-frontend
-        image: ifilyaninitmo/itdt-contained-frontend:master
-        env:
-        - name: REACT_APP_USERNAME
-          valueFrom:
-            configMapKeyRef:
-              name: frontend-config
-              key: REACT_APP_USERNAME          
-        - name: REACT_APP_COMPANY_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: frontend-config
-              key: REACT_APP_COMPANY_NAME
-```  
-
-3. объединяем в rs1.yaml и запусткаем
-```html
-kubectl apply -f C:\kube\lab3\rs1.yaml
+        - name: lab3-front
+          image: ifilyaninitmo/itdt-contained-frontend:master
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: frontend-config
 ```
 
-4. результат (созданный replicaSet - frontend2)      
-![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab3/pic1.png)
+# Запуск yaml файлов
 
-5. запускаем сервис
-```html
+```
+kubectl apply -f C:\kube\lab3\configmap.yaml
+kubectl apply -f C:\kube\lab3\deployment.yaml
+```
+
+
+# Генерация сертификата
+
+В Данной лобораьорной работе будет создаваться защищенное соединение, для него нужен ключ и сертификат.
+
+Я их сгенерировал онлайн
+
+https://certificatetools.com/
+
+Резульаты сохранены в cert.crt и cert.key
+
+# Секреты
+
+Добавляем в секреты ранее созданный серификат и ключ
+
+```
+kubectl create secret tls lab3-secret --cert=cert.crt --key=cert.key
+```
+
+# Промежуточные результаты
+
+![image alt](./pic/pic1.png)
+
+![image alt](./pic/pic2.png)
+
+# Создание сервиса
+
+Можно запустить, через команду
+
+```
+kubectl expose deployment lab3-front --type=LoadBalancer --port=3000
+```
+
+А можно через yaml
+
+```
 apiVersion: v1
 kind: Service
 metadata:
-  name: f2-service
+ name: lab3-service
 spec:
-  selector:
-    app: frontend2
-  ports:
-    - protocol: TCP
-      port: 3000
-      targetPort: 3000
+ selector:
+   app: lab3-front
+ ports:
+   - protocol: TCP
+     port: 3000
+     targetPort: 3000
 ```
 
-## Защищиенное соединение
-1. включение ingress
-```html
-minikube addons enable ingress
 ```
-2. секрет
-- я создавал секреь через mkcert (предваритьельно установил)
-```html
-kubectl -n kube-system create secret tls mkcert --key key.pem --cert cert.pem
+kubectl apply -f C:\kube\lab3\service.yaml
 ```
-- указал секрет в конфигурации ingress
 
-```html
-minikube addons configure ingress
--- Enter custom cert (format is "namespace/secret"): secret/mkcert
-```
-- перезапустил ingress
+# Создание Ingress
 
-3. cоздание ingress
-```html
+Ingress:
+
+```
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: f-ingress
+ name: lab3-ingress
 spec:
-  ingressClassName: nginx
-  rules:
-  - host: f-frontend.info
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: frontend2
-            port:
-              number: 3200
-tls:
-  - hosts:
-      - f-frontend.info
-    secretName: mkcert
+ rules:
+   - host: lab3-frontend.org
+     http:
+       paths:
+         - backend:
+             service:
+               name: lab3-service
+               port:
+                 number: 3000
+           path: /
+           pathType: Prefix
+ tls:
+   - hosts:
+       - lab3-frontend.org
+     secretName: lab3-secret
 ```
 
-4. дополнительные действия
-тк как я на windos 
-```html
-minikube tunnel
 ```
-```html
+kubectl apply -f C:\kube\lab3\ingress.yaml
+```
+
+Также включаем ingress addons
+
+```
+kubectl addons enable ingress
+```
+
+# Дополнительные действия
+
+Смотрим созданный ingress
+
+```
 kubectl get ingress
+kubectl get ingress-dns
 ```
->NAME        CLASS   HOSTS           ADDRESS        PORTS   AGE
->f-ingress   nginx   frontend.info   192.168.49.2   80      34m
 
-в файле hosts прописываем: 
-```html
-192.168.49.2 frontend.info
+![image alt](./pic/pic3.png)
+
+Прописываем данный адрес и ip в фалй hosts
+
+> Я так и не смог достучаться до этого ip
+> Но как я понял, раз minicube запущен локально, то и прописывать нужно не то что указано 192...
+> А 127.0.0.1, те localhost
+
+Прописываем
+
 ```
-5. 
+minicube tunnel
+```
 
+# Результат
+![image alt](./pic/pic4.png)
 
-## Результат
-1. http://127.0.0.1:3000
-![image alt](https://github.com/ivich1/2022_2023-introduction_to_distributed_technologies-k4113c-chernigin_i_a/tree/master/lab2/pic3.png)
-
-# Вопросы, ответы
-1. Изменяются ли переменные? Если да то почему?
-> **ответ:** В моем случае нет, тк я прописал из значенеи при создании deployment, если указать их в каждом контейнере отдельно то они будут разные.
