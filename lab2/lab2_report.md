@@ -87,6 +87,11 @@ kubectl port-forward service/ifilyaninitmo-pod 3000:3000
 
 3. В deployment.yaml манифкест для развертывания идентичного deployment
 
+
+# Схема
+
+![image alt](./pic/pic5.png)
+
 # Вопросы, ответы
 
 1. логи контейнера 

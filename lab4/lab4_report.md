@@ -128,6 +128,10 @@ minikube service lab4-front
 
 ![image alt](./pic/pic9.png)
 
+# Схема
+
+![image alt](./pic/pic10.png)
+
 
 
 

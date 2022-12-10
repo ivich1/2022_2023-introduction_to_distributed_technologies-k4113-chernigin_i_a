@@ -105,13 +105,17 @@ kubectl logs hashicorp-vault
 ```
 
 > здесь hashicorp-vault - имя искомого контейнера
-
+>
 >если не находит, возможно стоит поискать в других пространствах имен, и указать явно
 
 ![image alt](./pic/pic2_logs.png)
 
 Результат входа
 ![image alt](./pic/pic4_invault.png)
+
+# Схема
+
+![image alt](./pic/pic5.png)
 
 # Вопросы, ответы
 -

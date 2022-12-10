@@ -180,3 +180,6 @@ minicube tunnel
 # Результат
 ![image alt](./pic/pic4.png)
 
+# Схема
+
+![image alt](./pic/pic5.png)
